@@ -5,17 +5,23 @@
   <title>header</title>
  </head>
  <body>
-    <input style="margin-top: 15%;" type="file" onchange="readFile(this)">
-    <div style="font-size: 30px; text-align: center;">
-      <p id="word"></p>
+    <input style="margin-top: 10%;" type="file" onchange="readFile(this)">
+    <p>Слов всего:</p>
+    <p id="word_total"></p>
+    <div style="text-align: center;">
+      <p style="font-size: 30px;" id="word"></p>
       <button onclick="showTranslation()">show</button>
       <button onclick="showWord()">refresh</button>
+      <p id="word">Слов пройдено:</p>
+      <p id="word_count"></p>
     </div>
+    
     
     <script>
         let wordArr;
         let word;
         let wordDiv = document.getElementById('word');
+        let wordCount = 0;
 
         function readFile(input) {
           let file = input.files[0];
@@ -27,6 +33,7 @@
           reader.onload = function() {
             console.log(reader.result);
             wordArr = reader.result.split("\r\n");
+            document.getElementById('word_total').textContent = wordArr.length;
             showWord();
             
           };
@@ -42,6 +49,8 @@
         }
 
         function showWord() {
+          wordCount++;
+          document.getElementById('word_count').textContent = wordCount;
           let index = getRandomInt(wordArr.length);
           word = wordArr[index];
           wordDiv.textContent = word.split(">")[0];
