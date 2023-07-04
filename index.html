@@ -5,14 +5,15 @@
   <title>header</title>
  </head>
  <body>
-    <input style="margin-top: 10%;" type="file" onchange="readFile(this)">
-    <p>Слов всего:</p>
+    <input style="margin-top: 5%;" type="file" onchange="readFile(this)">
+    <p>Word total:</p>
     <p id="word_total"></p>
+    <button onclick="reorder()">reorder</button>
     <div style="text-align: center;">
       <p style="font-size: 30px;" id="word"></p>
       <button onclick="showTranslation()">show</button>
-      <button onclick="showWord()">refresh</button>
-      <p id="word">Слов пройдено:</p>
+      <button onclick="showWord()">next</button>
+      <p id="word">Word count:</p>
       <p id="word_count"></p>
     </div>
     
@@ -32,7 +33,7 @@
         
           reader.onload = function() {
             console.log(reader.result);
-            wordArr = reader.result.split("\r\n");
+            wordArr = mixarr(reader.result.split("\r\n"));
             document.getElementById('word_total').textContent = wordArr.length;
             showWord();
             
@@ -49,15 +50,28 @@
         }
 
         function showWord() {
-          wordCount++;
-          document.getElementById('word_count').textContent = wordCount;
-          let index = getRandomInt(wordArr.length);
-          word = wordArr[index];
-          wordDiv.textContent = word.split(">")[0];
+          
+          //let index = getRandomInt(wordArr.length);
+          if (wordCount < wordArr.length) {
+            word = wordArr[wordCount];
+            wordDiv.textContent = word.split(">")[0];
+            wordCount++;
+            document.getElementById('word_count').textContent = wordCount;
+          }
         }
 
         function getRandomInt(max) {
           return Math.floor(Math.random() * max);
+        }
+
+        function reorder() {
+          wordArr = mixarr(wordArr);
+          wordCount = 0;
+          showWord();
+        }
+
+        function mixarr(arr){
+          return arr.map(i=>[Math.random(), i]).sort().map(i=>i[1])
         }
         </script>
  </body>
